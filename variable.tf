@@ -3,7 +3,7 @@ variable "aws_region" {
 }
 
 variable "project_name" {
-  default = "sandhya18
+  default = "sandhya18"
 }
 
 variable "container_port" {
