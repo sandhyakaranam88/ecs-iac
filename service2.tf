@@ -7,13 +7,11 @@ resource "aws_iam_policy" "service2_sqs_access" {
   name = "${var.project_name}-service2-sqs"
   policy = jsonencode({
     Version = "2012-10-17",
-    Statement = [
-      {
-        Effect = "Allow",
-        Action = ["sqs:SendMessage"],
-        Resource = aws_sqs_queue.msg_queue.arn
-      }
-    ]
+    Statement = [{
+      Effect = "Allow",
+      Action = ["sqs:SendMessage"],
+      Resource = aws_sqs_queue.msg_queue.arn
+    }]
   })
 }
 
