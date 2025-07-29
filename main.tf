@@ -5,9 +5,10 @@ provider "aws" {
 data "aws_availability_zones" "available" {}
 
 module "vpc" {
-  source  = "terraform-aws-modules/vpc/aws"
-  version = "4.0.2"
-
+   source  = "terraform-aws-modules/vpc/aws"
+ - version = ">= 4.0.0" # use the latest stable version
+  # other variables...
+}
   name = "${var.project_name}-vpc"
   cidr = "10.0.0.0/16"
   azs  = slice(data.aws_availability_zones.available.names, 0, 2)
@@ -21,12 +22,18 @@ module "vpc" {
 }
 
 resource "aws_s3_bucket" "uploads" {
-  bucket = "${var.project_name}-uploads-bucket"
-  acl    = "private"
-  versioning {
-    enabled = true
+  bucket = "${var.project_name}-uploads"
+  force_destroy = true
+}
+
+resource "aws_s3_bucket_versioning" "uploads_versioning" {
+  bucket = aws_s3_bucket.uploads.id
+
+  versioning_configuration {
+    status = "Enabled"
   }
 }
+
 
 resource "aws_sqs_queue" "msg_queue" {
   name = "${var.project_name}-queue"
