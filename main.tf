@@ -5,10 +5,9 @@ provider "aws" {
 data "aws_availability_zones" "available" {}
 
 module "vpc" {
-   source  = "terraform-aws-modules/vpc/aws"
- - version = ">= 4.0.0" # use the latest stable version
-  # other variables...
-}
+  source  = "terraform-aws-modules/vpc/aws"
+  version = ">= 4.0.0"
+
   name = "${var.project_name}-vpc"
   cidr = "10.0.0.0/16"
   azs  = slice(data.aws_availability_zones.available.names, 0, 2)
@@ -33,7 +32,6 @@ resource "aws_s3_bucket_versioning" "uploads_versioning" {
     status = "Enabled"
   }
 }
-
 
 resource "aws_sqs_queue" "msg_queue" {
   name = "${var.project_name}-queue"
